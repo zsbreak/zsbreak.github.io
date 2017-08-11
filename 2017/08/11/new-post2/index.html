@@ -1,0 +1,722 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="zsbreak" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Paxos作为分布式系统的基石，一直都是CS领域的热门话题，Paxos号称是最难理解的算法。最近几天一直在看Paxos相关资料，发现Paxos算法执行过程很简单，但如何推导出Paxos算法确实令人费解。网上有大量关于Paxos的基本概念、算法描述、推导过程等文章，所以关于Paxos的基本概念就不赘述了，但很多文章都没有说明白推导过程中一些容易让人疑惑的问题（例如为什么提案要被设计为编号+value">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解Paxos算法的推导过程">
+<meta property="og:url" content="http://yoursite.com/2017/08/11/new-post2/index.html">
+<meta property="og:site_name" content="zsbreak">
+<meta property="og:description" content="Paxos作为分布式系统的基石，一直都是CS领域的热门话题，Paxos号称是最难理解的算法。最近几天一直在看Paxos相关资料，发现Paxos算法执行过程很简单，但如何推导出Paxos算法确实令人费解。网上有大量关于Paxos的基本概念、算法描述、推导过程等文章，所以关于Paxos的基本概念就不赘述了，但很多文章都没有说明白推导过程中一些容易让人疑惑的问题（例如为什么提案要被设计为编号+value">
+<meta property="og:updated_time" content="2017-08-11T14:25:42.962Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解Paxos算法的推导过程">
+<meta name="twitter:description" content="Paxos作为分布式系统的基石，一直都是CS领域的热门话题，Paxos号称是最难理解的算法。最近几天一直在看Paxos相关资料，发现Paxos算法执行过程很简单，但如何推导出Paxos算法确实令人费解。网上有大量关于Paxos的基本概念、算法描述、推导过程等文章，所以关于Paxos的基本概念就不赘述了，但很多文章都没有说明白推导过程中一些容易让人疑惑的问题（例如为什么提案要被设计为编号+value">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/11/new-post2/"/>
+
+
+
+
+
+  <title>理解Paxos算法的推导过程 | zsbreak</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zsbreak</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/11/new-post2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zsbreak">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/27771175?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zsbreak">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                理解Paxos算法的推导过程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-11T22:25:25+08:00">
+                2017-08-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Paxos作为分布式系统的基石，一直都是CS领域的热门话题，Paxos号称是最难理解的算法。最近几天一直在看Paxos相关资料，发现Paxos算法执行过程很简单，但如何推导出Paxos算法确实令人费解。网上有大量关于Paxos的基本概念、算法描述、推导过程等文章，所以关于Paxos的基本概念就不赘述了，但很多文章都没有说明白推导过程中一些容易让人疑惑的问题（例如为什么提案要被设计为编号+value？value被选定的条件为什么是半数以上而不是其他？等等），本文将试图用描述清楚Paxos的推导过程，并解答一些常见的疑问，Bridge the gap。</p>
+<p>先描述算法流程，Paxos算法分为两个阶段，具体如下：</p>
+<blockquote>
+<p><strong>阶段一</strong>：<br>(a) Proposer选择一个提案编号N，然后向半数以上的Acceptor发送编号为N的Prepare请求。<br>(b) 如果一个Acceptor收到一个编号为N的Prepare请求，且N大于该Acceptor已经响应过的所有Prepare请求的编号，那么它就会将它已经接受过的编号最大的提案（如果有的话）作为响应反馈给Proposer，同时该Acceptor承诺不再接受任何编号小于N的提案。<br><strong>阶段二：</strong><br>(a)如果Proposer收到<strong>半数以上Acceptor</strong>对其发出的编号为N的Prepare请求的响应，那么它就会发送一个针对[N,V]提案的Accept请求给半数以上的Acceptor。注意：V就是收到的响应中编号最大的提案的value，如果响应中不包含任何提案，那么V就由Proposer自己决定。<br>(b)如果Acceptor收到一个针对编号为N的提案的Accept请求，只要该Acceptor没有对编号大于N的Prepare请求做出过响应，它就接受该提案</p>
+</blockquote>
+<p>一致性算法需要保证：</p>
+<blockquote>
+<ul>
+<li>在被提出的提案中，只有一个提案会被选定</li>
+<li>即被选中的只能是被提出的提案，如果没有提案被提出，则不会有提案被选中</li>
+<li>但一个提案被选定（chosen）后，进程应该可以获取选定的提案信息</li>
+</ul>
+</blockquote>
+<p>如何满足这个任务呢？下面进行推导，推导过程就回答了</p>
+<p><strong><em>为什么算法需要多个acceptor接受提案？</em></strong><br>最简单的做法就是只设置一个acceptor多个proposer，那么acceptor可以chosen任意proposer提出的一个提案，chosen之后，其余proposer发送提案给acceptor，直接返回chosen的提案即可完成任务，但存在的问题是acceptor是单点，acceptor挂了，系统就无法工作了，所以需要设置多个acceptor避免单点问题</p>
+<p>需求1：即使只有一个提案被提出，算法仍然能选出一个提案<br>要满足这个需求，算法只需要保证P1，即可满足需求1：</p>
+<blockquote>
+<p>P1：<strong>一个acceptor必须接受它收到的第一个提案</strong>。</p>
+</blockquote>
+<p><strong><em>为什么value被选定需要被半数以上的Acceptor接受？</em></strong><br>只保证P1的话，即一个value的选定只需要一个acceptor接受的话，那么如果每个Proposer分别提出不同的value，发给不同的Acceptor。根据P1，acceptor分别接受自己收到的value，就导致不同的value被选定。<br>出现了不一致。如果算法认为value选定需要全部acceptor接受，那其实此时退化成了二阶段提交协议了。<br>因此，我们需要让算法满足：<strong>一个value被选定需要被半数以上的Acceptor接受</strong>。 因为一个集合不可能同时存在两个半数以上的子集同时接受两个不同value（两个半数以上子集必然有非空的交集，由于算法限定只接受最大的prepare编号，导致value值在同一时刻是唯一的）。因此算法如果能保证value被半数acceptor接受，则意味这此时被认定的value是唯一的。</p>
+<p><strong><em>为什么acceptor要接受多个提案？</em></strong><br>如果acceptor只能够接受一个提案，则可能发生所有proposer提出的提案都无法达到多数，从而无法进入选定阶段。比如p1/p2/p3 向C1、C2、C3发送提案，可能会发生C1接受P1，C2接受P2，C3接受P3，而P1、P2、P3发送给其余C的消息被丢弃，导致没有value被选定。因此acceptor必须要接受多个提案。</p>
+<p><strong><em>为什么提案要设计成【提案=编号+value】而不是【提案=value】？</em></strong><br>因为acceptor需要接受多个提案，如果提案就是value，考虑acceptor该如何处理新到达的提案，如果根据<strong>到达acceptor的先后顺序</strong>做处理：如果先到的被接受，后面的都丢弃，那此时acceptor只能接受一个提案；如果后到的都被接受，那么当某value被选定之后，其他proposer提出新value只要到达接受该value的acceptor，该选定的value就会被覆盖，从而可能导致由选定进入不选定状态，甚至进入下个value的选定状态，违反了一致性。如果<strong>根据value的大小做处理</strong>同样存在选定状态会反复变化的可能，但由于acceptor要能接受多个提案，提案可能存在被覆盖的情况，因此要保证可能被选定的value在被其他提案覆盖的情况下，仍有可能保留下来，因此有了提案=全局唯一编号+value的设计，通过编号的偏序关系定义acceptor处理提案的方式。</p>
+<p>到这一步，当一个提案被选定的时候，其实指的是相同的value占到了acceptor的大多数，而其中的提案编号可能是不相同的，继续推导，当一个value=v被选定之后，其后被选定的提案如果value也是v，那么所有acceptor最终都会达到一致，<strong>如果之后被选定的提案value不是v，则可能导致选定的值反复变化，出现不一致</strong>，因此有了P2约束：</p>
+<blockquote>
+<p>P2：如果某个value为v的提案被选定了，那么每个编号更高的被选定提案的value必须也是v。</p>
+</blockquote>
+<p>从P1到P2其实很难理解是如何推导出到P2的，毕竟P2之前我们只是在推导acceptor该如何处理提案、提案的设计、选定的时机等，P2却直接约束了提案选出来之后算法该如何运行，而<strong>P2之前的那些设计并不能保证一定能达到有一个value被选定这个状态。</strong>  先把这个疑问留在这里，继续往下推导，从P2到P2b约束的推导是很直接易懂的，网上资料很多，不赘述了，比较费解的是从P2b如何推导到P2c，其实我们不需要理解当初Lamport如何由P2b推导出P2c的，只需要明白满足P2c是保证P2b的充分条件即可，这样算法只需要满足P2c，即可满足P2b&gt;=P2a&gt;=P2&gt;=P1，通过保持P2c就能满足P2b是用数学归纳法证明的：</p>
+<blockquote>
+<p>P2b：如果某个value为v的提案被选定了，那么之后任何Proposer提出的编号更高的提案的value必须也是v。</p>
+<p>P2c：对于任意的N和V，如果提案[N, V]被提出，那么存在一个半数以上的Acceptor组成的集合S，满足以下两个条件中的任意一个：</p>
+<ul>
+<li>S中每个Acceptor都没有接受过编号小于N的提案。 </li>
+<li>S中Acceptor接受过的小于N的编号最大的那个提案的value为V。</li>
+</ul>
+</blockquote>
+<p> <strong>证明：</strong><br> 通过保持P2c就可保证P2b，即是证明当某个提案[N0,V0]被选定后，如果我们保持P2c即可保证之后任何Proposer提出的提案Nn的value是V0。（注意通过P2c如何并不能保证一定会有value被选定，只是假定在在P2c的条件下，若某value被选定后，下一个提议的值一定是该value）。</p>
+<ol>
+<li><p>当Nn=N0+1，（反证法）假设[N0,V0]已经被选定，所属的半数以上子集设为A，有新提案Nn的值不为V0，而是V1。那么根据P2c要么存在一组半数以上acceptor集合B批准的提案变化都大于Nn（很明显由于A的存在，这种情况不可能发生），要么B中编号小于Nn的最大的value为V1（由于A的存在，B中小于Nn的编号就是N0，自然不可能为V1，所以也不可能发生），两种情况都不会发生。</p>
+</li>
+<li><p>假设当Nn在N0+1~Nn-1之间所有提案的值都是V0，需要证明保持 P2c即可保证当Nn=Nn时proposer提议的值也是V0。   <strong>根据P2c，必然存在一个半数以上的子集A，要么A中接受的提案编号都大于Nn，由于V0已经被选定，自然不可能发生，要么A中接受过的小于Nn的最大编号提案，</strong>因为此时已经V0已经被选定，若A中最大编号是N0，那么Nn提议的值就是V0；若A中最大编号在N0+1~Nn-1之间，则根据前提假设，Nn提议的值仍是V0。故得证。</p>
+</li>
+</ol>
+<p>推导到这里，我们只要保证P2c即可保证<strong>若有提案被选定，则之后任意一个proposer提议的值都可以和已选定的值保持一致</strong>。</p>
+<p><strong><em>P2c只保证了若有提案被选定，可以保持选定值的一致性，但算法如何保证一定有值会被选定呢？</em></strong><br>之前遗留的这个问题似乎还没解决，其实P2c也顺便解决了能选出多数派的问题，因为proposer提交的value是受acceptor限制的（上轮编号的提案虽然没有通过，但以后的提案应该继续之前的，“与其预测未来，不如限制未来”），就不会在一次选举中提交两个不同的value，即使能提交也会因为proposal编号问题有一个会被拒绝，从而能保证正常情况下能形成多数派。特殊情况就是一种极端情况导致paxos算法失去活性，始终没有提案被选定。比如当P1提出M1提案，完成阶段一，但此时P2提出M2同样完成阶段一，当P1进入第二阶段时发现它选发出的accept请求全部被忽略，如此反复，导致提案的选举过程陷入死循环，为了避免这种情况发生，可以选择一个主proposer，规定只有主proposer才能提出提案，从而保证paxos算法的活性。</p>
+<p>Paxos协议本身是比较简单的，如何将Paxos协议工程化，才是真正的难题。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/11/new-post/" rel="next" title="如何构造另一个随机生成函数？">
+                <i class="fa fa-chevron-left"></i> 如何构造另一个随机生成函数？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars3.githubusercontent.com/u/27771175?v=3&s=460"
+               alt="zsbreak" />
+          <p class="site-author-name" itemprop="name">zsbreak</p>
+           
+              <p class="site-description motion-element" itemprop="description">Trying to find something to descible myself.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zsbreak</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

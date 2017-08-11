@@ -90,15 +90,16 @@
 
 
 
-<meta name="description" content="Trying to find something to descible myself.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="zsbreak">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="昨天下午面搜狐的时候被问到了构造随机数生成函数的问题，事后觉得有必要归纳一下相关题型。  1.已知随机数生成函数randA能等概率生成0~n的整数，设计一个等概率生成0~m的randB  算法：若n大于m，则直接利用randA随机产生的数作为randB，如果randA产生的数大于m则丢弃这个数，重新产生，直至成功。若n远大于m，则只需构造最大值为m(n/m)的随机函数randC，然后丢弃randA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何构造另一个随机生成函数？">
+<meta property="og:url" content="http://yoursite.com/2017/08/11/new-post/index.html">
 <meta property="og:site_name" content="zsbreak">
-<meta property="og:description" content="Trying to find something to descible myself.">
+<meta property="og:description" content="昨天下午面搜狐的时候被问到了构造随机数生成函数的问题，事后觉得有必要归纳一下相关题型。  1.已知随机数生成函数randA能等概率生成0~n的整数，设计一个等概率生成0~m的randB  算法：若n大于m，则直接利用randA随机产生的数作为randB，如果randA产生的数大于m则丢弃这个数，重新产生，直至成功。若n远大于m，则只需构造最大值为m(n/m)的随机函数randC，然后丢弃randA">
+<meta property="og:updated_time" content="2017-08-11T14:23:57.924Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="zsbreak">
-<meta name="twitter:description" content="Trying to find something to descible myself.">
+<meta name="twitter:title" content="如何构造另一个随机生成函数？">
+<meta name="twitter:description" content="昨天下午面搜狐的时候被问到了构造随机数生成函数的问题，事后觉得有必要归纳一下相关题型。  1.已知随机数生成函数randA能等概率生成0~n的整数，设计一个等概率生成0~m的randB  算法：若n大于m，则直接利用randA随机产生的数作为randB，如果randA产生的数大于m则丢弃这个数，重新产生，直至成功。若n远大于m，则只需构造最大值为m(n/m)的随机函数randC，然后丢弃randA">
 
 
 
@@ -126,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/08/11/new-post/"/>
 
 
 
 
 
-  <title>zsbreak</title>
+  <title>如何构造另一个随机生成函数？ | zsbreak</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -157,9 +158,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -282,135 +281,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/11/new-post2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zsbreak">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/27771175?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="zsbreak">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/08/11/new-post2/" itemprop="url">
-                  理解Paxos算法的推导过程
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-11T22:25:25+08:00">
-                2017-08-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Paxos作为分布式系统的基石，一直都是CS领域的热门话题，Paxos号称是最难理解的算法。最近几天一直在看Paxos相关资料，发现Paxos算法执行过程很简单，但如何推导出Paxos算法确实令人费解。网上有大量关于Paxos的基本概念、算法描述、推导过程等文章，所以关于Paxos的基本概念就不赘述
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/11/new-post2/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
 
   
 
@@ -440,10 +313,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2017/08/11/new-post/" itemprop="url">
-                  如何构造另一个随机生成函数？
-                </a>
+                如何构造另一个随机生成函数？
               
             
           </h1>
@@ -493,34 +363,55 @@
       
 
       
+        <p>昨天下午面搜狐的时候被问到了构造随机数生成函数的问题，事后觉得有必要归纳一下相关题型。</p>
+<blockquote>
+<p>1.已知随机数生成函数randA能等概率生成0~n的整数，设计一个等概率生成0~m的randB</p>
+</blockquote>
+<p><strong>算法：</strong><br>若n大于m，则直接利用randA随机产生的数作为randB，如果randA产生的数大于m则丢弃这个数，重新产生，直至成功。若n远大于m，则只需构造最大值为m<em>(n/m)的随机函数randC，然后丢弃randA产生的数大于m</em>(n/m)的那部分即可得到randC。而randB=randC/(n/m)。执行k次仍然没能产生m以内的随机数的概率为((n-m<em>(n/m))/n)^k。<br>若n小于m，则利用n进制思路，实现一个随机生成函数randC=randA+randA</em>(n+1)+randA<em>(n+1)^2+..etc（一直这样构造，直到使得randC的最大值和randB或randB的倍数接近），randC生成各个数都是等概率的。此时randC&gt;=randB</em>x （x是任意的倍数），然后丢弃大于的部分即可。若存在a使得((n+1)^a-1)/m可以整除，则存在无需丢弃的可能，否则不可能。</p>
+<blockquote>
+<p>2.给定一个能以60%、40%概率生成0、1的随机函数randA，设计能各以50%概率生成0和1的随机函数</p>
+</blockquote>
+<p><strong>算法：</strong><br>调用两次randA，有（0,0）、（0，1）…等总共四种情况，其中(0,1)，和(1,0)发生的概率相等，那么可以丢弃(0，0)，（1,1）这两种情况，则剩下的(1,0)，（0,1）两种情况发生的概率都是50%。</p>
+<blockquote>
+<p>3.给定random()函数，设计一个能以60%、40%概率生成0、1的随机函数</p>
+</blockquote>
+<p><strong>算法：</strong><br>用random生成1~10之间的随机数，若产生的数在0~6范围则返回1，否则返回0。<br>如果要设计能以概率p1、p2、p3..pm概率生成0、1、2、…m的随机函数，则只需要将random函数<br>随机范围设置为(p1+p2+..pm)<em>100，例如若随机产生的数在取值范围p1</em>100~(p1+p2)*100时，则输出 2，以此类推进行处理。这种做法可以实现任意整数随机数的任意概率分布。如果要用一个连续分布实现另一个连续分布的随机函数，可以参考<a href="https://www.zhihu.com/question/20086207?sort=created" target="_blank" rel="external">https://www.zhihu.com/question/20086207?sort=created</a></p>
+<blockquote>
+<p>4.给定一个能以60%、40%概率生成0、1的随机函数，设计能以等概率生成1~n的新随机函数</p>
+</blockquote>
+<p><strong>算法：</strong><br>先用问题2算法的思路，用题目给定的随机函数设计出等概率生成0,1的随机函数randA，再根据问题1算法的二进制的思路，用randA按位随机k=1+logn(以2为底）次，生成一个可能大于n的随机数，若大于n则抛弃，重新生成即可。</p>
+<blockquote>
+<p>5.给定random，设计一个随机函数，使得0出现1次，1出现2次….n-1出现n次</p>
+</blockquote>
+<p><strong>算法：</strong><br>把随机数看成是由两个能生成0~n-1之间数的随机函数之和 rand()+rand()，则：<br>n-1=（n-1）+0=（n-2）+1=（n-3）+2…=1+(n-2)=0+(n-1)    共有n种搭配<br>n-2=（n-2）+0=（n-3）+1=（n-4）+2…=1+(n-3)=0+(n-2)    共有n-1种搭配<br>…….<br>1=0+1=1+0                                                                               共有2种搭配</p>
+<p>n-i 共有n-i+1种搭配，即满足题意，若随机函数之和大于n-1则丢弃即可。</p>
+<blockquote>
+<p>6.给定random，设计一个随机函数，使得1出现1次，1出现1次….n出现n次</p>
+</blockquote>
+<p><strong>算法：</strong><br>跟问题5算法思路相似, 新随机函数大概的形式为randC=randA()+randB()+a ,就是配置randA、randB、和a的参数使得满足题意：这里randA为能生成1~n的函数，randB为能生成0~n的函数，a为0：<br>n   = n+0=（n-1）+1=…=1+(n-1)             共有n 种搭配<br>n-1=（n-1）+0=（n-2）+1=…=1+(n-2)   共有n-1种搭配<br>n-2=（n-2）+1=（n-3）+2=…=1+(n-3)   共有n-2种搭配<br>…….<br>1=1+0                                                        共有1种搭配<br>n 共有n种搭配，即满足题意，若随机函数之和大于n则丢弃即可。</p>
+<p>参考链接：<br><a href="http://sumnous.github.io/blog/2014/05/13/random-pick-function/" target="_blank" rel="external">http://sumnous.github.io/blog/2014/05/13/random-pick-function/</a><br><a href="http://blog.csdn.net/majianfei1023/article/details/7249918" target="_blank" rel="external">http://blog.csdn.net/majianfei1023/article/details/7249918</a></p>
+
+      
+    </div>
+
+    <div>
+      
         
-          
-          昨天下午面搜狐的时候被问到了构造随机数生成函数的问题，事后觉得有必要归纳一下相关题型。
 
-1.已知随机数生成函数randA能等概率生成0~n的整数，设计一个等概率生成0~m的randB
+      
+    </div>
 
-算法：若n大于m，则直接利用randA随机产生的数作为randB，如果randA产生的数大于m则丢弃这个数，重新
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/11/new-post/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
-      
-    </div>
-
-    <div>
       
     </div>
 
@@ -528,147 +419,42 @@
       
 
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/30/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zsbreak">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/27771175?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="zsbreak">
-    </span>
-
-    
-      <header class="post-header">
-
         
-        
-          <h1 class="post-title" itemprop="name headline">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/04/30/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
             
-              
-                
-                <a class="post-title-link" href="/2017/04/30/hello-world/" itemprop="url">
-                  Hello World
-                </a>
-              
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+              <a href="/2017/08/11/new-post2/" rel="prev" title="理解Paxos算法的推导过程">
+                理解Paxos算法的推导过程 <i class="fa fa-chevron-right"></i>
+              </a>
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-30T10:48:45+08:00">
-                2017-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/04/30/hello-world/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -676,6 +462,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -853,6 +643,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
 
   
 
